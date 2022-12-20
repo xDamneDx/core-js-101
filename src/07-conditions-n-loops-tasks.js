@@ -465,8 +465,70 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  let horizontal;
+  let vertical;
+  let diagonal;
+
+  for (let i = 0; i < 3; i += 1) {
+    let line;
+
+    for (let j = 0; j < 3; j += 1) {
+      if (!vertical && i === 0 && position[i][j]) {
+        let row = position[i][j];
+
+        for (let k = 0; k < 3; k += 1) {
+          if (!position[k][j] || position[k][j] !== row) {
+            row = undefined;
+            break;
+          }
+        }
+
+        vertical = row;
+      }
+
+      if (!diagonal && i === 0 && j === 0 && position[0][0]) {
+        let diagonalUD = position[0][0];
+
+        for (let k = 1; k < 3; k += 1) {
+          if (position[k][k] !== diagonalUD) {
+            diagonalUD = undefined;
+            break;
+          }
+        }
+
+        diagonal = diagonalUD;
+      }
+
+      if (!diagonal && i === 2 && j === 0 && position[2][0]) {
+        let diagonalDU = position[2][0];
+
+        for (let k = 1; k < 3; k += 1) {
+          if (position[i - k][k] !== diagonalDU) {
+            diagonalDU = undefined;
+            break;
+          }
+        }
+
+        diagonal = diagonalDU;
+      }
+
+      if (!horizontal) {
+        if (j === 0 && position[i][j]) {
+          line = position[i][j];
+        } else if (position[i][j] !== line) {
+          line = undefined;
+          break;
+        }
+      }
+    }
+
+    if (!horizontal) {
+      horizontal = line;
+    }
+  }
+
+  return horizontal || vertical || diagonal;
 }
 
 module.exports = {
